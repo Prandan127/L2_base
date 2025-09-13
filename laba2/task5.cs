@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-public class PrimeDecomp
+public class Kata
 {
     public static string factors(int lst)
     {

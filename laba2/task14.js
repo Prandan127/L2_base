@@ -1,9 +1,11 @@
-function isCircleSorted(arr){
-  let count = 0;
+function isCircleSorted(arr) {
+  let countDrops = 0;
   for (let i = 0; i < arr.length; i++) {
-    if (arr[i] > arr[(i + 1) % arr.length]) {
-      count++;
+    let next = (i + 1) % arr.length;
+    if (arr[i] > arr[next]) {
+      countDrops++;
+      if (countDrops > 1) return false;
     }
   }
-  return count <= 1;
+  return true;
 }

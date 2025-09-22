@@ -1,23 +1,25 @@
-function hasTwCubeSums(n) {
-    const pairs = new Set();
-    
-    // Iterate through possible cube roots
-    for (let a = 1; a * a * a <= n; a++) {
-        const a3 = a * a * a;
-        const remaining = n - a3;
-        
-        // Check if remaining is a perfect cube
-        const b = Math.round(Math.pow(remaining, 1/3));
-        if (b >= a && b * b * b === remaining) {
-            const pair = `${Math.min(a, b)},${Math.max(a, b)}`;
-            pairs.add(pair);
-            
-            // If we found two distinct pairs, return true
-            if (pairs.size >= 2) {
+function hasTwoCubeSums(n) {
+    const pairs = [];
+    const limit = Math.floor(Math.cbrt(n));
+
+    for (let a = 1; a <= limit; a++) {
+        const a3 = a ** 3;
+        for (let b = a + 1; b <= limit; b++) {
+            const b3 = b ** 3;
+            if (a3 + b3 === n) {
+                pairs.push([a, b]);
+            }
+        }
+    }
+
+    for (let i = 0; i < pairs.length; i++) {
+        for (let j = i + 1; j < pairs.length; j++) {
+            const set = new Set([...pairs[i], ...pairs[j]]);
+            if (set.size === 4) {
                 return true;
             }
         }
     }
-    
+
     return false;
 }

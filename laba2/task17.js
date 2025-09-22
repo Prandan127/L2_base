@@ -1,15 +1,12 @@
-// Since Node 10, we're using Mocha.
-// You can use `chai` for assertions.
-const chai = require("chai");
-const assert = chai.assert;
-// Uncomment the following line to disable truncating failure messages for deep equals, do:
-// chai.config.truncateThreshold = 0;
-// Since Node 12, we no longer include assertions from our deprecated custom test framework by default.
-// Uncomment the following to use the old assertions:
-// const Test = require("@codewars/test-compat");
-
-describe("Solution", function() {
-  it("should test for something", function() {
-    assert.strictEqual(1 + 1, 2);
-  });
-});
+function cache(func) {
+  const cacheMap = new Map();
+  return function(...args) {
+    const key = JSON.stringify(args);
+    if (cacheMap.has(key)) {
+      return cacheMap.get(key);
+    }
+    const result = func.apply(this, args);
+    cacheMap.set(key, result);
+    return result;
+  };
+}

@@ -1,0 +1,56 @@
+<input type="text" id="input" value="RRRRRRRGRGBRGBRGRRRBBBBG" style="width: 300px;">
+<div id="result"></div>
+
+<script>
+    const input = document.getElementById('input');
+    const result = document.getElementById('result');
+    
+    function findPosition(path) {
+        if (!path) return 'RGB';
+        if (path.length === 1) return path;
+        
+        const transformations = {
+            'R': { 'R': 'R', 'G': 'G', 'B': 'B' },
+            'G': { 'R': 'B', 'G': 'R', 'B': 'G' },
+            'B': { 'R': 'G', 'G': 'B', 'B': 'R' }
+        };
+        
+        const processSegment = (str) => {
+            if (str.length === 1) return str;
+            if (str.length === 2) return transformations[str[0]][str[1]];
+            
+            const mid = Math.floor(str.length / 2);
+            const left = processSegment(str.substring(0, mid));
+            const right = processSegment(str.substring(mid));
+            
+            return mergeColors(left, right, transformations);
+        };
+        
+        const mergeColors = (left, right, trans) => {
+            if (left.length === 1 && right.length === 1) {
+                return trans[left][right];
+            }
+            
+            const result = new Set();
+            for (const l of left) {
+                for (const r of right) {
+                    const merged = mergeColors(l, r, trans);
+                    for (const c of merged) {
+                        result.add(c);
+                    }
+                }
+            }
+            return Array.from(result).sort().join('');
+        };
+        
+        return processSegment(path);
+    }
+
+    input.addEventListener('input', function() {
+        const path = this.value.toUpperCase().replace(/[^RGB]/g, '');
+        const position = findPosition(path);
+        result.textContent = position;
+    });
+
+    result.textContent = findPosition(input.value);
+</script>
